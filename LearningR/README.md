@@ -2,6 +2,8 @@ Johanne Sloth Lauszus - Liver cirrhosis
 
 A little bit of coding fun
 
+Testing the commit function again
+
 TODO: Add more to the title of your project here
 
 # LearningR:
