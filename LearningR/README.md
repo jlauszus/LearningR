@@ -1,5 +1,7 @@
 Johanne Sloth Lauszus - Liver cirrhosis
 
+A little bit of coding fun
+
 TODO: Add more to the title of your project here
 
 # LearningR:
