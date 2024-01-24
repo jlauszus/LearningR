@@ -4,6 +4,8 @@ A little bit of coding fun
 
 Testing the commit function again
 
+A random sentence
+
 TODO: Add more to the title of your project here
 
 # LearningR:
