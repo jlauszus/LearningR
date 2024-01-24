@@ -3,6 +3,24 @@ title: "Reproducible document"
 author: "Johanne Sloth Lauszus"
 format: html
 ---
+- Johanne Sloth Lauszus
+- Aarhus Universitet
+- Lever-, Mave- og Tarmmedicinsk afdeling, AUH
+
+# Introduction
+Insert a **super great** introduction *here*
+
+# Methods and results
+Can **you** help me calculate *this*
+
+## Analysis
+```{r}
+2+2
+```
+
+# Discussion
+Let's **discuss** this a *little* further
+
 
 ```{r setup}
 #| message: FALSE
