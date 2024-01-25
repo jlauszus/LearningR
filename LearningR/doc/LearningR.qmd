@@ -41,7 +41,7 @@ NHANES_small
 ```{r}
 2 + 2
 ```
-# Table of results
+# Tables
 
 ```{r}
 #| message: FALSE
@@ -92,7 +92,7 @@ Cute kitten in @fig-kitten
 
 # Figures and plots
 ###### *Learning to use ggplot*
-## Plotting one variable plots
+## Plotting one variable
 #### Continous variable
 ```{r}
 #| message: FALSE
@@ -136,7 +136,7 @@ NHANES_small %>%
   geom_smooth(na.rm = TRUE)
 ```
 #### plotting two discrete variables
-
+*Note: With discrete variables you cannot use na.rm to remove NA, but you have to use filter function*
 ```{r}
 NHANES_small %>%
   filter(!is.na(education), !is.na(diabetes)) %>%
@@ -151,14 +151,14 @@ NHANES_small %>%
   geom_violin(na.rm = TRUE)
 ```
 ### Exercise: Creating plots with one or two variables
-#### **1**
+**1**
 ```{r}
 library(NHANES)
 nhanes_exercise <- NHANES %>%
   rename_with(snakecase::to_snake_case) %>%
   rename(sex = gender)
 ```
-#### **2**
+**2**
 ```{r}
 #| label: fig-age-diabetesage
 #| fig-cap: "Age at collection and age at diabetes diagnosis"
@@ -194,4 +194,55 @@ nhanes_exercise %>%
   ggplot(aes(x = bmi, y = mean_arterial_pressure)) +
   geom_hex(na.rm = TRUE) +
   geom_smooth()
+```
+## Visualizing three or more variables
+```{r}
+#| label: fig-bp_education_diabetes
+#| fig-cap: "Average systolic bloodpressure with different education levels and diabetes status"
+NHANES_small %>%
+  filter(!is.na(diabetes), !is.na(education)) %>%
+  ggplot(aes(x = education, y = bp_sys_ave, colour = diabetes)) +
+  geom_boxplot(na.rm = TRUE)
+```
+*Note: One continous variables and two discrete variable:*
+```{r}
+#| label: fig-bp_bmi_age
+#| fig-cap: "Average systolic bloodpressure in relation to bmi and age"
+NHANES_small %>%
+  ggplot(aes(x = bmi, y = bp_sys_ave, colour = age)) +
+  geom_point(na.rm = TRUE)
+```
+*Note: Two continous variables and one discrete variable:*
+```{r}
+#| label: fig-bp_bmi_diabetes_draft
+#| fig-cap: "Average systolic bloodpressure in relation to bmi and diabetes status"
+NHANES_small %>%
+  filter(!is.na(diabetes)) %>%
+  ggplot(aes(x = bmi, y = bp_sys_ave, colour = diabetes)) +
+  geom_point(na.rm = TRUE)
+```
+*Note: Hard to see because of the colours, therefore:*
+
+*Note: if you prefer to see the two graphs on top of eachother, write rows instead of cols in the last part of the code*
+
+*Note: vars = variable*
+```{r}
+#! label: fig-bp_bmi_diabetes
+#| fig-cap: "Average systolic bloodpressure in relation to bmi and diabetes status"
+NHANES_small %>%
+  filter(!is.na(diabetes)) %>%
+  ggplot(aes(x = bmi, y = bp_sys_ave)) +
+  geom_point(na.rm = TRUE) +
+  facet_grid(cols = vars(diabetes))
+```
+
+*Note: 5 variables:*
+```{r}
+#! label: fig-bp_bmi_age_diabetes_education
+#| fig-cap: "Average systolic bloodpressure in relation to bmi, age, diabetes status and education"
+NHANES_small %>%
+  filter(!is.na(diabetes), !is.na(education)) %>%
+  ggplot(aes(x = bmi, y = bp_sys_ave, colour = age)) +
+  geom_point(na.rm = TRUE) +
+  facet_grid(rows = vars(diabetes), cols = vars(education))
 ```
