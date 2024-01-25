@@ -23,6 +23,7 @@ Can **you** help me calculate *this*
 # Discussion
 Let's **discuss** this a *little* further
 
+# Learning R - setup
 
 ```{r setup}
 #| message: FALSE
