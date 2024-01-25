@@ -246,3 +246,19 @@ NHANES_small %>%
   geom_point(na.rm = TRUE) +
   facet_grid(rows = vars(diabetes), cols = vars(education))
 ```
+### Exercise for changing colours
+```{r}
+# Barplot to work from, with two discrete variables
+NHANES_small %>%
+  filter(!is.na(diabetes), !is.na(education)) %>%
+  ggplot(aes(x = diabetes, fill = education)) +
+  geom_bar(position = position_dodge()) +
+  scale_fill_viridis_d(option = "inferno")
+```
+```{r}
+# Scatterplot to work from, with three continuous variables
+NHANES_small %>%
+  ggplot(aes(x = bmi, y = bp_sys_ave, colour = age)) +
+  geom_point(na.rm = TRUE) +
+  scale_colour_viridis_c()
+```
