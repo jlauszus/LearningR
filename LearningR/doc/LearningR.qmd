@@ -1,7 +1,9 @@
 ---
 title: "Reproducible document"
 author: "Johanne Sloth Lauszus"
-format: html
+format:
+    html: 
+        theme: yeti 
 ---
 - Johanne Sloth Lauszus
 - Aarhus Universitet
@@ -15,7 +17,7 @@ Can **you** help me calculate *this*
 
 ## Analysis
 ```{r}
-2+2
+2 + 2
 ```
 
 # Discussion
@@ -42,6 +44,7 @@ NHANES_small
 # Table of results
 
 ```{r}
+#| message: FALSE
 NHANES_small %>%
   filter(!is.na(diabetes)) %>%
   group_by(diabetes, education) %>%
@@ -81,4 +84,114 @@ NHANES_small %>%
     "Mean BMI" = mean_bmi
   ) %>%
   knitr::kable(caption = "Mean values of Age and BMI for each education and diabetes status.")
+```
+# Images
+Cute kitten in @fig-kitten
+
+![Image by Dimitri Houtteman from Pixabay](images/kitten.jpg){#fig-kitten width="50%" height="50%"}
+
+# Figures and plots
+###### *Learning to use ggplot*
+## Plotting one variable plots
+#### Continous variable
+```{r}
+#| message: FALSE
+#| fig-cap: "Distribution of BMI"
+#| label: fig-bmi-histo
+
+NHANES_small %>%
+  filter(bmi <= 60) %>%
+  ggplot(aes(x = bmi)) +
+  geom_histogram(na.rm = TRUE)
+```
+
+#### Discrete variable
+Bar plots is meant for discrete (/categorical) variables, but never for e.g. means
+```{r}
+#| label: fig-education-diabetes
+#| fig-cap: "Level of Education and prevalence of Diabetes"
+#| fig-subcap:
+#| - "Education level"
+#| - "Diabetes prevalence"
+#| layout-ncol: 2
+
+NHANES_small %>%
+  filter(!is.na(education)) %>%
+  ggplot(aes(x = education)) +
+  geom_bar()
+
+NHANES_small %>%
+  filter(!is.na(diabetes)) %>%
+  ggplot(aes(x = diabetes)) +
+  geom_bar()
+```
+## Plotting two variables
+
+#### Two continous variables
+```{r}
+#| message: FALSE
+NHANES_small %>%
+  ggplot(aes(x = bmi, y = bp_sys_ave)) +
+  geom_hex(na.rm = TRUE) +
+  geom_smooth(na.rm = TRUE)
+```
+#### plotting two discrete variables
+
+```{r}
+NHANES_small %>%
+  filter(!is.na(education), !is.na(diabetes)) %>%
+  ggplot(aes(x = diabetes, fill = education)) +
+  geom_bar(position = position_dodge())
+```
+#### Plotting discrete and continous variables
+```{r}
+NHANES_small %>%
+  filter(!is.na(diabetes), bmi <= 60) %>%
+  ggplot(aes(x = diabetes, y = bmi)) +
+  geom_violin(na.rm = TRUE)
+```
+### Exercise: Creating plots with one or two variables
+#### **1**
+```{r}
+library(NHANES)
+nhanes_exercise <- NHANES %>%
+  rename_with(snakecase::to_snake_case) %>%
+  rename(sex = gender)
+```
+#### **2**
+```{r}
+#| label: fig-age-diabetesage
+#| fig-cap: "Age at collection and age at diabetes diagnosis"
+#| fig-subcap:
+#| - "Age at collection"
+#| - "Age at diabetes diagnosis"
+#| layout-ncol: 2
+
+nhanes_exercise %>%
+  ggplot(aes(x = age)) +
+  geom_density(na.rm = TRUE)
+
+nhanes_exercise %>%
+  ggplot(aes(x = diabetes_age)) +
+  geom_density(na.rm = TRUE)
+```
+**3**
+```{r}
+#| label: fig-smoke-age20
+#| fig-cap: "Number of people aged 20 or above who smoke now"
+nhanes_exercise %>%
+  filter(age >= 20, !is.na(smoke_now)) %>%
+  ggplot(aes(x = smoke_now)) +
+  geom_bar()
+```
+**4**
+```{r}
+#| message: FALSE
+#| warning: FALSE
+nhanes_exercise %>%
+  mutate(mean_arterial_pressure = (bp_sys_ave + (2 * bp_dia_ave)) / 3) %>%
+  filter(!is.na(bp_sys_ave), !is.na(bp_dia_ave)) %>%
+  ggplot(aes(x = bmi, y = mean_arterial_pressure)) +
+  geom_hex(na.rm = TRUE) +
+  geom_smooth()
 ```
